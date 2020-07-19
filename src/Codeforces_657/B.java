@@ -19,6 +19,10 @@ public class B {
             long r = s.nextLong();
             long m = s.nextLong();
 
+            /**
+             * This is the bottleneck of the application. Should have been optimized to consider the earliest
+             * values where n could possible be a solution.
+             */
             for (int n = 1; n < Integer.MAX_VALUE; n++) {
                 long bottom = l;
                 long top = r;
