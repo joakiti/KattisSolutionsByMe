@@ -1,4 +1,4 @@
-class Solution {
+class LeetCode_islandCount {
 public:
     int countGoodTriplets(vector<int>& arr, int a, int b, int c) {
         int ans = 0;
