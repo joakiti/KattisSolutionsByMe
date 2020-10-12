@@ -24,18 +24,27 @@ public class ApproxDNFSAT {
         //int[][] clauses = dnfs.generateDNFSATs();
         //int[][] variablesAssigned = dnfs.assignVariables();
         /**
-         * Generate 100 clauses with 1 unique variable in each clause.
+         * Generate 20 clauses with 1 unique variable in each clause.
          * The size should be 2^n (2^n-1 for the case when all are negative).
          */
-        int noVariables = 20;
-        int[][] clauses = new int[noVariables][1];
-        int[][] variablesAssigned = new int[noVariables][1];
+        /**
+         *         int noVariables = 20;
+         *         int[][] clauses = new int[noVariables][1];
+         *         int[][] variablesAssigned = new int[noVariables][1];
+         *         for (int i = 0; i < noVariables; i++) {
+         *             clauses[i] = new int[]{1};
+         *             variablesAssigned[i] = new int[]{i};
+         *         }
+         */
+        int noVariables = 10000;
+        int[][] clauses = new int[noVariables][noVariables];
+        int[][] variablesAssigned = new int[noVariables][noVariables];
         for (int i = 0; i < noVariables; i++) {
-            clauses[i] = new int[]{1};
-            variablesAssigned[i] = new int[]{i};
+            clauses[i] = IntStream.generate(() -> 0).limit(noVariables).toArray();
+            clauses[i][i] = 1;
+            variablesAssigned[i] = IntStream.range(0, noVariables).toArray();;
         }
-
-        for (int i = 1; i < 75000; i = i*2) {
+        for (int i = 1; i < 75000; i = i * 2) {
             System.out.print(i + ",");
             System.out.print(dnfs.karpLubySampling(clauses, variablesAssigned, i, noVariables));
             System.out.println();
@@ -79,7 +88,7 @@ public class ApproxDNFSAT {
         for (int j = i - 1; j >= 0; j--) {
             int[] chosenClause = clauses[j];
             int[] variablesInClause = variablesAssigned[j];
-            for (int k = 0; k < chosenClause.length ; k++) {
+            for (int k = 0; k < chosenClause.length; k++) {
                 int clauseValue = chosenClause[k];
                 int var = variablesInClause[k];
                 if (a.get(var) != clauseValue) {
