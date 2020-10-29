@@ -10,10 +10,6 @@ public class metricTSP {
         Vertex Copenhagen = new Vertex(55.676, 12.566);
         Vertex Aarhus = new Vertex(56.157, 10.211);
         Vertex Odense = new Vertex(55.396, 10.388);
-        Copenhagen.name = "Copenhagen";
-        Aarhus.name = "Aarhus";
-        Odense.name = "Odense";
-                /**
         Vertex Aalborg = new Vertex(57.048, 9.919);
         Vertex Esbjerg = new Vertex(55.47, 8.452);
         Vertex Horsens = new Vertex(55.861, 9.85);
@@ -27,16 +23,44 @@ public class metricTSP {
         Vertex Aabenraa = new Vertex(55.045335, 9.419403);
         Vertex Faaborg = new Vertex(55.098016, 10.244751);
         Vertex Grenaa = new Vertex(56.413142, 10.879211);
-         **/
+        Copenhagen.name = "Copenhagen";
+        Aarhus.name = "Aarhus";
+        Odense.name = "Odense";
+        Aalborg.name = "Aalborg";
+        Esbjerg.name = "Esbjerg";
+        Horsens.name = "Horsens";
+        Randers.name = "Randers";
+        Kolding.name = "Kolding";
+        Vejle.name = "Vejle";
+        Greve.name = "Greve";
+        Svendborg.name = "Svendborg";
+        Thisted.name = "Thisted";
+        Holstebro.name = "Holstebro";
+        Aabenraa.name = "Aabenraa";
+        Faaborg.name = "Faaborg";
+        Grenaa.name = "Grenaa";
         List<Vertex> cities = new ArrayList<>();
         cities.add(Copenhagen);
         cities.add(Aarhus);
         cities.add(Odense);
+        cities.add(Aalborg);
+        cities.add(Esbjerg);
+        cities.add(Horsens);
+        cities.add(Randers);
+        cities.add(Kolding);
+        cities.add(Vejle);
+        cities.add(Greve);
+        cities.add(Svendborg);
+        cities.add(Thisted);
+        cities.add(Holstebro);
+        cities.add(Aabenraa);
+        cities.add(Faaborg);
+        cities.add(Grenaa);
         HashMap<Vertex, List<Edge>> map = new HashMap<>();
         for (int i = 0; i < cities.size(); i++) {
             List<Edge> edgesForCity = new ArrayList<>();
             Vertex city = cities.get(i);
-            for (int j = 0; j < cities.size() ; j++) {
+            for (int j = 0; j < cities.size(); j++) {
                 if (i == j) continue;
                 Vertex neighbour = cities.get(j);
                 edgesForCity.add(new Edge(city, neighbour, distance(city.lat, neighbour.lat, city.lon, neighbour.lon)));
@@ -45,9 +69,21 @@ public class metricTSP {
         }
         Graph g = new Graph(map);
         MST mst = new MST(g);
-        System.out.println(g.isCycle(g.edges));
         g = mst.run();
-        System.out.println(g.isCycle(g.edges));
+        Eulerian eulerian = new Eulerian(g);
+        g = eulerian.run();
+        int sum = 0;
+        List<Vertex> vertices = g.dfs(Copenhagen);
+        vertices.add(Copenhagen);
+        for (int i = 0; i < vertices.size() - 1; i++) {
+            Vertex src = vertices.get(i);
+            Vertex dst = vertices.get(i+1);
+            sum += distance(src.lat, dst.lat, src.lon, dst.lon);
+            System.out.println(distance(src.lat, dst.lat, src.lon, dst.lon));
+            System.out.println(dst.name);
+        }
+        System.out.println(sum);
+
     }
 
     static double distance(double lat1, double lat2, double lon1, double lon2) {
@@ -80,15 +116,31 @@ public class metricTSP {
                 Edge e = sortedEdges.pollLast();
                 if (!g.formsCycle(sortedEdges, e)) {
                     sortedEdges.addFirst(e);
-                }
-                else {
+                } else {
                     g.mapToedge.get(e.src).remove(e);
                 }
             }
             g = new Graph(g.mapToedge);
             return g;
         }
+    }
 
+    static class Eulerian {
+        Graph g;
+
+        public Eulerian(Graph g) {
+            this.g = g;
+        }
+
+        Graph run() {
+            HashMap<Vertex, List<Edge>> newGraph = new HashMap<>(g.mapToedge);
+            for (Edge e : g.edges) {
+                // can be a problem if no edges assigned and list is null
+                newGraph.get(e.dst).add(new Edge(e.dst, e.src, e.cost));
+            }
+            g = new Graph(newGraph);
+            return g;
+        }
     }
 
     static class Graph {
@@ -140,6 +192,27 @@ public class metricTSP {
             Vertex xset = find(parent, x);
             Vertex yset = find(parent, y);
             parent.put(xset, yset);
+        }
+
+        List<Vertex> dfs(Vertex origin) {
+            Stack<Vertex> toVisit = new Stack<>();
+            HashSet<Vertex> visited = new HashSet<>();
+            LinkedList<Vertex> ans = new LinkedList<>();
+            if (origin == null) {
+                return new ArrayList<>();
+            }
+            toVisit.push(origin);
+            while (!toVisit.isEmpty()) {
+                Vertex src = toVisit.pop();
+                visited.add(src);
+                ans.add(src);
+                for (Edge neighbor : mapToedge.get(src)) {
+                    if (!visited.contains(neighbor.dst)) {
+                        toVisit.push(neighbor.dst);
+                    }
+                }
+            }
+            return ans;
         }
     }
 
