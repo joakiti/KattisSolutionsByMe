@@ -20,6 +20,7 @@ matched = set()
 matching = []
 missingMatching = True
 while missingMatching:
+    #Mostly for debugging purposes, remove the matched vertices from the graph
     for k in matched:
         graph.pop(k, None)
     missingMatching = False
