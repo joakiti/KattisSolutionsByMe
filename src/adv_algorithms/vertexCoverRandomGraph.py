@@ -18,7 +18,6 @@ for v in graph.keys():
         include = randint(1, 10)
         if include <= 9:
             newGraph[v].append(neighbor)
-            newGraph[neighbor].append(v)
 
 graph = newGraph
 
@@ -52,7 +51,6 @@ for x in range(0, len(variables)):
 model += lpSum(variables)
 status = model.solve()
 print(f"status: {model.status}, {LpStatus[model.status]}")
-print(f"objective: {model.objective.value()}")
 
 # Solve the problem
 status = model.solve()
@@ -63,3 +61,4 @@ for var in model.variables():
     else:
         var.value = lambda: 0
     print(f"{var.name}: {var.value()}")
+print(f"objective: {model.objective.value()}")

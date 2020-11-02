@@ -1,7 +1,5 @@
-import itertools
 from collections import defaultdict
-from scipy.optimize import linprog
-from pulp import GLPK
+
 from pulp import LpMinimize, LpProblem, LpStatus, lpSum, LpVariable
 
 V = 5
@@ -36,9 +34,7 @@ while missingMatching:
                     break
             # If no matching is found, we hit false again
             missingMatching = False
-
-print(len(matching))
-
+print(len(matched))
 # Create the model
 model = LpProblem(name="small-problem", sense=LpMinimize)
 
@@ -63,3 +59,4 @@ for var in model.variables():
     else:
         var.value = lambda: 0
     print(f"{var.name}: {var.value()}")
+print(f"objective: {model.objective.value()}")
