@@ -58,4 +58,8 @@ print(f"objective: {model.objective.value()}")
 status = model.solve()
 
 for var in model.variables():
+    if var.value() >= 0.5:
+        var.value = lambda: 1
+    else:
+        var.value = lambda: 0
     print(f"{var.name}: {var.value()}")
