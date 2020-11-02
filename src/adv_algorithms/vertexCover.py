@@ -1,4 +1,8 @@
+import itertools
 from collections import defaultdict
+from scipy.optimize import linprog
+from pulp import GLPK
+from pulp import LpMinimize, LpProblem, LpStatus, lpSum, LpVariable
 
 V = 5
 
@@ -20,9 +24,6 @@ matched = set()
 matching = []
 missingMatching = True
 while missingMatching:
-    #Mostly for debugging purposes, remove the matched vertices from the graph
-    for k in matched:
-        graph.pop(k, None)
     missingMatching = False
     for dic in graph.keys():
         if dic not in matched:
@@ -33,6 +34,28 @@ while missingMatching:
                     matched.add(dic)
                     matched.add(neighbor)
                     break
-            #If no matching is found, we hit false again
+            # If no matching is found, we hit false again
             missingMatching = False
-print(matching)
+
+print(len(matching))
+
+# Create the model
+model = LpProblem(name="small-problem", sense=LpMinimize)
+
+# Initialize the decision variables
+variables = [LpVariable(name=f"{i}", lowBound=0, upBound=1) for i in sorted(graph.keys())]
+for x in range(0, len(variables)):
+    for edge in graph[x]:
+        model += (variables[x-1] + variables[edge - 1] >= 1)
+
+# Add the objective function to the model
+model += lpSum(variables)
+status = model.solve()
+print(f"status: {model.status}, {LpStatus[model.status]}")
+print(f"objective: {model.objective.value()}")
+
+# Solve the problem
+status = model.solve()
+
+for var in model.variables():
+    print(f"{var.name}: {var.value()}")
