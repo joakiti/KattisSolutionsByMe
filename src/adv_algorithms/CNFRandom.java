@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class CNFRandom {
 
-    public static void main(String[] args) throws ContradictionException, TimeoutException {
+    public static void main(String[] args) {
         int n = 1000;
         /**
          * Pick c between 500 - 1000
@@ -56,7 +56,12 @@ public class CNFRandom {
             solver.setExpectedNumberOfClauses((int) r*n);
             solver.setTimeout(1); // 1 min timeout
             for (CNFClause clause : clauses) {
-                solver.addClause(new VecInt(clause.clause));
+                try {
+                    solver.addClause(new VecInt(clause.clause));
+                } catch (ContradictionException e) {
+                    System.out.println("Clauses was contradictory");
+
+                }
             }
             IProblem problem = solver;
             try {
@@ -65,11 +70,11 @@ public class CNFRandom {
                     System.out.println(Arrays.toString(problem.model()));
                 }
                 else {
-                    System.out.println("NOT SATISFIABLE");
+                    System.out.println(String.format("Given (r,n) = (%f, %d) not able to satisfy ", r,n));
                 }
             }
             catch (TimeoutException e ) {
-                System.out.println("not satisfied in time");
+                System.out.println(String.format("Given (r,n) = (%f, %d) not satisfied in time ", r,n));
             }
 
         }
