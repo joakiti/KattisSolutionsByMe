@@ -23,8 +23,6 @@ public class CNFRandom {
          * Pick fraction between 1 and 15.
          */
         double r = (new Random().nextDouble() / Double.MAX_VALUE) + (new Random().nextInt(13) + 1);
-        r = 2;
-        System.out.println(r);
         List<List<CNFClause>> random4CNFS = new ArrayList<>();
         Random rand = new Random();
         for (int i = 0; i < C; i++) {
