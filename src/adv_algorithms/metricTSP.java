@@ -56,6 +56,8 @@ public class metricTSP {
         cities.add(Aabenraa);
         cities.add(Faaborg);
         cities.add(Grenaa);
+        System.out.println(distance(Greve, Odense));
+        System.out.println(distance(Greve, Svendborg));
         HashMap<Vertex, List<Edge>> map = new HashMap<>();
         for (int i = 0; i < cities.size(); i++) {
             List<Edge> edgesForCity = new ArrayList<>();
@@ -79,11 +81,14 @@ public class metricTSP {
             Vertex src = vertices.get(i);
             Vertex dst = vertices.get(i+1);
             sum += distance(src.lat, dst.lat, src.lon, dst.lon);
-            System.out.println(distance(src.lat, dst.lat, src.lon, dst.lon));
             System.out.println(dst.name);
         }
         System.out.println(sum);
 
+    }
+
+    static double distance(Vertex a, Vertex b) {
+        return distance(a.lat, b.lat, a.lon, b.lon);
     }
 
     static double distance(double lat1, double lat2, double lon1, double lon2) {
