@@ -48,4 +48,4 @@ for t in cities.keys():
     if t != 0:
         minimal = min(minimal, DP[tuple(cities.keys())][t] + edges[t][start])
 
-print(minimal)
+print(minimal,)

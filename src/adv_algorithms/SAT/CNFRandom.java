@@ -1,4 +1,4 @@
-package adv_algorithms;
+package adv_algorithms.SAT;
 import org.sat4j.core.VecInt;
 import org.sat4j.minisat.SolverFactory;
 import org.sat4j.specs.*;

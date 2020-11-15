@@ -1,4 +1,4 @@
-package adv_algorithms;
+package adv_algorithms.TSP;
 
 import java.lang.reflect.Array;
 import java.util.*;

@@ -1,4 +1,4 @@
-package adv_algorithms;
+package adv_algorithms.SAT;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
