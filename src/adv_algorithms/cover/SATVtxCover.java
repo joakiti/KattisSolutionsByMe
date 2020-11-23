@@ -1,6 +1,5 @@
 package adv_algorithms.cover;
 
-import adv_algorithms.SAT.CNFRandom;
 import org.sat4j.core.VecInt;
 import org.sat4j.minisat.SolverFactory;
 import org.sat4j.specs.ContradictionException;
@@ -11,12 +10,12 @@ import org.sat4j.specs.TimeoutException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class FPTVtxCover {
+public class SATVtxCover {
 
     static HashMap<Integer, Integer> backwards = new HashMap<>();
 
     public static void main(String[] args) {
-        FPTVtxCover cover = new FPTVtxCover();
+        SATVtxCover cover = new SATVtxCover();
         Scanner s = new Scanner(System.in);
 
         var graph = new HashMap<Integer, List<Integer>>();
