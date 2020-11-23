@@ -73,7 +73,7 @@ public class FPTVtxCover {
         /**
          * 3
          */
-        //edgeClauses(graph, k, clauses, variables);
+        edgeClauses(graph, k, clauses, variables);
         /**
          * 2
          */
@@ -81,7 +81,7 @@ public class FPTVtxCover {
         /**
          * 1
          */
-        //generateColumnClauses(graph, k, clauses, variables);
+        generateColumnClauses(graph, k, clauses, variables);
 
         return clauses;
     }
@@ -142,16 +142,17 @@ public class FPTVtxCover {
 
     private static void generateRowClauses(HashMap<Integer, List<Integer>> graph, int k, ArrayList<int[]> clauses, int[][] variables) {
         for (int i = 0; i < k; i++) {
-            for (int chosen = 0; chosen < graph.size(); chosen++) {
+            for (int j = 0; j < graph.size(); j++) {
+                int[] clause = new int[graph.size()];
                 for (int v = 0; v < graph.size(); v++) {
-                    clauses.add(new int[]{
-                            variables[i][chosen], variables[i][v] * -1
-                    });
+                    clause[v] = variables[i][v] * -1; //Negation
                 }
-                /**
-                 * Also add a clause that forces one variable to be picked
-                 */
+                clause[j] = variables[i][j];
+                clauses.add(clause);
             }
+            /**
+             * Also add a clause that forces one variable to be picked
+             */
             int[] clause = new int[graph.size()];
             for (int v = 0; v < graph.size(); v++) {
                 clause[v] = variables[i][v]; //Negation
