@@ -38,7 +38,7 @@ public class FPTVtxCover {
         ArrayList<int[]> clauses = generateClauses(graph, k);
 
         ISolver solver = SolverFactory.newDefault();
-        solver.setTimeout(100); // 1 min timeout
+        solver.setTimeout(1000); // 1 min timeout
         for (int[] clause : clauses) {
             try {
                 solver.addClause(new VecInt(clause));
@@ -88,22 +88,14 @@ public class FPTVtxCover {
 
     private static void generateColumnClauses(HashMap<Integer, List<Integer>> graph, int k, ArrayList<int[]> clauses, int[][] variables) {
         for (int n = 0; n < graph.size(); n++) {
-            /**
-             * Let a single vertex be set to true
-             */
             for (int i = 0; i < k; i++) {
-                int[] column = new int[k];
-                /**
-                 * And all others to false
-                 */
                 for (int j = 0; j < k; j++) {
-                    column[j] = variables[j][n] * -1; //Negation
+                    if (i != j) {
+                        clauses.add(new int[]{
+                                variables[i][n] * -1, variables[j][n] * -1
+                        });
+                    }
                 }
-                /**
-                 * Except for i
-                 */
-                column[i] = variables[i][n];
-                clauses.add(column);
             }
             /**
              * Let all vertices be set to false
@@ -121,13 +113,10 @@ public class FPTVtxCover {
             for (Integer neighbour : graph.get(key)) {
                 ArrayList<Integer> clause = new ArrayList<>();
                 for (int i = 0; i < k; i++) {
-                    for (int j = 0; j < k; j++) {
-                        clause.add(variables[i][key] * -1);
-                        clause.add(variables[j][neighbour] * -1);
-                        clauses.add(convertIntegers(clause));
-                        clause = new ArrayList<>();
-                    }
+                    clause.add(variables[i][key]);
+                    clause.add(variables[i][neighbour]);
                 }
+                clauses.add(convertIntegers(clause));
             }
         }
     }
@@ -143,12 +132,13 @@ public class FPTVtxCover {
     private static void generateRowClauses(HashMap<Integer, List<Integer>> graph, int k, ArrayList<int[]> clauses, int[][] variables) {
         for (int i = 0; i < k; i++) {
             for (int j = 0; j < graph.size(); j++) {
-                int[] clause = new int[graph.size()];
-                for (int v = 0; v < graph.size(); v++) {
-                    clause[v] = variables[i][v] * -1; //Negation
+                for (int l = 0; l < graph.size(); l++) {
+                    if (j != l) {
+                        clauses.add(new int[] {
+                           variables[i][j] * -1, variables[i][l] * -1
+                        });
+                    }
                 }
-                clause[j] = variables[i][j];
-                clauses.add(clause);
             }
             /**
              * Also add a clause that forces one variable to be picked
