@@ -19,21 +19,22 @@ public class SATVtxCover {
         Scanner s = new Scanner(System.in);
 
         var graph = new HashMap<Integer, List<Integer>>();
-        /**
-         while (s.hasNext()) {
-         int from = s.nextInt();
-         int to = s.nextInt();
-         graph.putIfAbsent(from, new ArrayList<>());
-         graph.putIfAbsent(to, new ArrayList<>());
-         graph.get(from).add(to);
-         graph.get(to).add(from);
-         }**/
+        while (s.hasNext()) {
+            int from = s.nextInt();
+            int to = s.nextInt();
+            graph.putIfAbsent(from, new ArrayList<>());
+            graph.putIfAbsent(to, new ArrayList<>());
+            graph.get(from).add(to);
+            graph.get(to).add(from);
+        }
         int n = 24;
-        int k = 12;
+        int k = 11;
+        /**
         for (int i = 0; i < n; i++) {
             graph.putIfAbsent(i, new ArrayList<>());
             graph.get(i).add((i + 1) % n);
         }
+         **/
         ArrayList<int[]> clauses = generateClauses(graph, k);
 
         ISolver solver = SolverFactory.newDefault();
@@ -96,14 +97,6 @@ public class SATVtxCover {
                     }
                 }
             }
-            /**
-             * Let all vertices be set to false
-             */
-            int[] column = new int[k];
-            for (int j = 0; j < k; j++) {
-                column[j] = variables[j][n] * -1; //Negation
-            }
-            clauses.add(column);
         }
     }
 
@@ -133,8 +126,8 @@ public class SATVtxCover {
             for (int j = 0; j < graph.size(); j++) {
                 for (int l = 0; l < graph.size(); l++) {
                     if (j != l) {
-                        clauses.add(new int[] {
-                           variables[i][j] * -1, variables[i][l] * -1
+                        clauses.add(new int[]{
+                                variables[i][j] * -1, variables[i][l] * -1
                         });
                     }
                 }
