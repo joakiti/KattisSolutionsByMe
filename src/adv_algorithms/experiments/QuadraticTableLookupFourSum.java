@@ -26,8 +26,6 @@ public class QuadraticTableLookupFourSum {
         for (int i = 0; i < N; ++i)
             for (int j = i + 1; j < N; j += 1) {// i goes through {0, ..., N-1}
                 long key = vals[i] + vals[j];
-                int finalI = i;
-                int finalJ = j;
                 var solutionKey = H2.get(-key);
                 if (solutionKey != null) {
                     checkIfUniqueSolution(i, j, solutionKey);
