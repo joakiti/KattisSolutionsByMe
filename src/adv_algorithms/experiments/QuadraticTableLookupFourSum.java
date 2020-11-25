@@ -1,7 +1,7 @@
 package adv_algorithms.experiments;
 
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class QuadraticTableLookupFourSum {
     static String test = "5\n" +
