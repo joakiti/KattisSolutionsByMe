@@ -1,7 +1,7 @@
 package adv_algorithms.experiments;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Scanner;
 
 public class QuadraticTableLookupFourSum {
     static String test = "5\n" +
@@ -15,7 +15,7 @@ public class QuadraticTableLookupFourSum {
         HashMap<Long, HashMap<Long, Long>> H = new HashMap<>();
         HashMap<Long, HashMap<Integer, Integer>> H2 = new HashMap<>();
 
-        Scanner S = new Scanner(test);
+        Scanner S = new Scanner(System.in);
 
         int N = Integer.parseInt(S.nextLine());
         long[] vals = new long[N];
@@ -36,16 +36,19 @@ public class QuadraticTableLookupFourSum {
                 Long key = H.get(vals[i]).get(vals[j]);
                 int finalI = i;
                 int finalJ = j;
-                var solution =  H2.get(-key)
-                        .entrySet()
-                        .stream()
-                        .filter(integerIntegerEntry ->
-                                integerIntegerEntry.getKey() != finalI &&
-                                        integerIntegerEntry.getValue() != finalJ).findAny();
-                if (solution.isPresent()) {
-                    System.out.println(vals[i] + " " + vals[j]);
-                    System.out.println(vals[solution.get().getKey()] + " " + vals[solution.get().getValue()]);
-                    System.out.println("Found");
+                if (H2.containsKey(-key)) {
+                    var solution =  H2.get(-key)
+                            .entrySet()
+                            .stream()
+                            .filter(integerIntegerEntry ->
+                                    integerIntegerEntry.getKey() != finalI &&
+                                            integerIntegerEntry.getKey() != finalJ &&
+                                            integerIntegerEntry.getValue() != finalJ &&
+                                            integerIntegerEntry.getValue() != finalI ).findAny();
+                    if (solution.isPresent()) {
+                        System.out.println("Found");
+                        System.exit(0);
+                    }
                 }
             }
         System.out.println("None");
