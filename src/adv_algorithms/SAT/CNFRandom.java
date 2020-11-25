@@ -58,6 +58,7 @@ public class CNFRandom {
                 ISolver solver = SolverFactory.newDefault();
                 solver.newVar(n);
                 solver.setExpectedNumberOfClauses((int) r * n);
+
                 solver.setTimeoutMs(10000); // 1 min timeout
                 for (CNFClause clause : clauses) {
                     try {
