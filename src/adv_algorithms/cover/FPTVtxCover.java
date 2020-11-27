@@ -32,7 +32,9 @@ public class FPTVtxCover {
         }
 
         FPTVtxCover alg = new FPTVtxCover();
-        System.out.println(alg.run(graph, 12, new ArrayList<>()));
+        for (int k = 0; k < 2; k++) {
+            System.out.println(alg.run(graph, k, new ArrayList<>()));
+        }
     }
 
 
